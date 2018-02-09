@@ -1,18 +1,31 @@
-import React from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-
+import YTSearch from 'youtube-api-search';
 import SearchBar from './components/search_bar';
+import VideoList from './components/video_list';
 
 const API_KEY = 'AIzaSyB9X-anVYscqA-BHcojr9IyaQc1y4sGunI';
 
-// Create a new component that produces some HTML
-const App = () => {
-  return (
-    <div>
-      <SearchBar />
-    </div>
-  );
+class App extends Component {
+constructor(props) {
+  super(props);
+
+  this.state = {videos: []};
+
+  YTSearch({key: API_KEY, term: 'React Redux'}, (videos) => {
+    // ES6 syntactical sugar since key and value are the same string
+    this.setState({videos});
+  });
 }
 
-// Take the component's generated HTML and put it on the page
+  render(){
+    return (
+      <div>
+        <SearchBar />
+        <VideoList videos={this.state.videos} />
+      </div>
+    );
+  }
+}
+
 ReactDOM.render(<App />, document.querySelector('.container'));
